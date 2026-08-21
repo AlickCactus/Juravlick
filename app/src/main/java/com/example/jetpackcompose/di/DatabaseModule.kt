@@ -6,11 +6,14 @@ import com.example.jetpackcompose.data.database.UserDatabase
 import com.example.jetpackcompose.domain.dao.UserDao
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-object DaoModel {
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
     @Provides
     @Singleton
     fun provideUserDatabase(@ApplicationContext context: Context): UserDatabase{

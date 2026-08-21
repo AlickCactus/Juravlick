@@ -1,6 +1,8 @@
 package com.example.jetpackcompose.presentation.screen
 
 
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,27 +11,51 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.jetpackcompose.R
 import com.example.jetpackcompose.presentation.navigation.Screen
 import com.example.jetpackcompose.presentation.screen.state.LoginScreenEvent
 import com.example.jetpackcompose.presentation.screen.state.LoginScreenState
 import com.example.jetpackcompose.presentation.screen.viewmodel.LoginScreenViewModel
 import com.example.jetpackcompose.presentation.ui.theme.components.StyleButton
+import com.example.jetpackcompose.util.Result
 
 @Composable
 fun LoginScreen(
     onNavigateTo: (Screen) -> Unit
 ){
-    val viewModel = viewModel<LoginScreenViewModel>()
+    val viewModel: LoginScreenViewModel = hiltViewModel()
+    val context = LocalContext.current
+
+    LaunchedEffect(viewModel.state.loginResult) {
+        viewModel.state.loginResult?.let {loginResult ->
+            when(loginResult){
+                is Result.Success<*> -> {
+                    onNavigateTo(Screen.Main)
+                }
+                is Result.Failure<*> -> {
+                    Toast.makeText(context, (loginResult as Result.Failure<*>).msg,
+                        Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     LoginView(
         state = viewModel.state,
         onNavigateTo = onNavigateTo,
@@ -51,9 +77,11 @@ fun LoginView(
      */
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
+        var currentColor by remember { mutableStateOf(Color.Black) }
+
         Text(
             text = stringResource(id = R.string.app_name),
             fontSize = 50.sp,
@@ -95,7 +123,7 @@ fun LoginView(
             modifier = Modifier.padding(10.dp)
         )
 
-        StyleButton(onClick = {}, modifier = Modifier.padding(top = 30.dp)) {
+        StyleButton(onClick = {onEvent(LoginScreenEvent.LoginBtnClicked)}, modifier = Modifier.padding(top = 30.dp)) {
             Text(
                 text = stringResource(id = R.string.login),
                 fontSize = 19.sp
@@ -105,7 +133,9 @@ fun LoginView(
         Text(
             text = stringResource(id = R.string.no_account_register),
             fontSize = 16.sp,
-            modifier = Modifier.padding(top = 20.dp).clickable{onNavigateTo(Screen.Register)}
+            modifier = Modifier.padding(top = 20.dp).clickable{
+                currentColor = Color.Cyan
+                onNavigateTo(Screen.Register)}
         )
     }
 }

@@ -15,5 +15,8 @@ interface UserDao {
     fun removeUser(user: User)
 
     @Query("SELECT * FROM user WHERE email=:email")
-    fun getUserByEmail(email: String): User?
+    fun getUserByEmail(email: String): User? //оператор безопасного вызова ?
+
+    @Query("SELECT * FROM user WHERE email=:email and password=:password")
+    fun login(email: String, password: String): User?
 }

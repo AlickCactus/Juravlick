@@ -4,5 +4,8 @@
     <string name="enter_email">Введите email</string>
     <string name="enter_password">Введите пароль</string>
     <string name="login">Войти</string>
+    <string name="register">Зарегистрироваться</string>
     <string name="no_account_register">Все еще нет аккаунта?</string>
+    <string name="enter_username">Введите имя</string>
+    <string name="have_account_login">У меня уже есть аккаунт</string>
 </resources>
