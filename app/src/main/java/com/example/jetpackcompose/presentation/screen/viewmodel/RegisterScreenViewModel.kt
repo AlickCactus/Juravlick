@@ -4,10 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.jetpackcompose.data.repository.AuthRepository
 import com.example.jetpackcompose.presentation.screen.state.RegisterScreenEvent
 import com.example.jetpackcompose.presentation.screen.state.RegisterScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +32,9 @@ class RegisterScreenViewModel @Inject constructor(private val authRepository: Au
         val password = state.password
         if (email.isEmpty() || password.isEmpty()) return
 
-        val result = authRepository.register(username, email, password)
-        this.state = state.copy(registerResult = result)
+        viewModelScope.launch {
+            val result = authRepository.register(username, email, password)
+            state = state.copy(registerResult = result)
+        }
     }
 }

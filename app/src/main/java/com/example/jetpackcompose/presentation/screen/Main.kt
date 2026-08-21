@@ -13,7 +13,7 @@ fun MainScreen(
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Arrangement.Center as Alignment.Horizontal
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
             text = "MainScreen"
