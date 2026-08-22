@@ -1,16 +1,14 @@
-package com.example.jetpackcompose.presentation.screen.viewmodel
+package com.example.jetpackcompose.presentation.screen.register
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcompose.data.repository.AuthRepository
-import com.example.jetpackcompose.presentation.screen.state.RegisterScreenEvent
-import com.example.jetpackcompose.presentation.screen.state.RegisterScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @HiltViewModel
 class RegisterScreenViewModel @Inject constructor(private val authRepository: AuthRepository): ViewModel(){

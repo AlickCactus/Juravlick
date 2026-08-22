@@ -1,22 +1,24 @@
-package com.example.jetpackcompose.presentation.screen
+package com.example.jetpackcompose.presentation.screen.main.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import com.example.jetpackcompose.presentation.navigation.Screen
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun MainScreen(
-    onNavigetTo: (Screen) -> Unit
-) {
+fun ProfileScreen(){
     Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = "MainScreen"
+            text = "ProfileScreen",
+            fontSize = 30.sp
         )
     }
 }

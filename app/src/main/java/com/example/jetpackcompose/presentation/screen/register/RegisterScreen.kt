@@ -1,5 +1,4 @@
-package com.example.jetpackcompose.presentation.screen
-
+package com.example.jetpackcompose.presentation.screen.register
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -29,69 +28,78 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.jetpackcompose.R
 import com.example.jetpackcompose.presentation.navigation.Screen
-import com.example.jetpackcompose.presentation.screen.state.LoginScreenEvent
-import com.example.jetpackcompose.presentation.screen.state.LoginScreenState
-import com.example.jetpackcompose.presentation.screen.viewmodel.LoginScreenViewModel
 import com.example.jetpackcompose.presentation.ui.theme.components.StyleButton
-import com.example.jetpackcompose.util.Result
+import com.example.jetpackcompose.domain.util.Result
+
 
 @Composable
-fun LoginScreen(
-    onNavigateTo: (Screen) -> Unit
-){
-    val viewModel: LoginScreenViewModel = hiltViewModel()
-    val context = LocalContext.current
+fun RegisterScreen(
+    onNavigetTo: (Screen) -> Unit
+) {
+    val viewModel: RegisterScreenViewModel = hiltViewModel()
 
-    LaunchedEffect(viewModel.state.loginResult) {
-        viewModel.state.loginResult?.let {loginResult ->
-            when(loginResult){
+    val context = LocalContext.current
+    LaunchedEffect(viewModel.state.registerResult) {
+        viewModel.state.registerResult?.let { registerResult ->
+            when(registerResult){
                 is Result.Success<*> -> {
-                    onNavigateTo(Screen.Main)
+                    onNavigetTo(Screen.Main)
                 }
                 is Result.Failure<*> -> {
-                    Toast.makeText(context, (loginResult as Result.Failure<*>).msg,
-                        Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, registerResult.msg, Toast.LENGTH_LONG).show()
                 }
             }
+
         }
     }
 
-    LoginView(
+    RegisterView(
         state = viewModel.state,
-        onNavigateTo = onNavigateTo,
-        onEvent = viewModel::onEvent
+        onEvent = viewModel::onEvent,
+        onNavigetTo = onNavigetTo
     )
 }
 
+
 @Composable
-fun LoginView(
-    onNavigateTo: (Screen) -> Unit = {},
-    state: LoginScreenState = LoginScreenState(),
-    //функция для изменения stete, т.к не могу обратиться ко ViewModel
-    onEvent: (LoginScreenEvent) -> Unit = {} //по умолчанию пустой
+fun RegisterView(
+    state: RegisterScreenState = RegisterScreenState(),
+    onEvent: (RegisterScreenEvent) -> Unit = {},
+    onNavigetTo: (Screen) -> Unit = {}
+){
+    var currentColor by remember { mutableStateOf(Color.Black) }
 
-
-    /*    viewModel: LoginScreenViewModel = viewModel()
-    Проблемно,т.к функция не полностьб изолирована и при тестировании придется билдить ViewModel, а мы хотим отдельно протестировать
-    Вместо этого можем передавать статусы. Для этог создадим класс, в котором будут разные статусы. Например по умолчанию
-     */
-) {
     Column(
         modifier = Modifier.fillMaxSize().background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        var currentColor by remember { mutableStateOf(Color.Black) }
-
         Text(
             text = stringResource(id = R.string.app_name),
             fontSize = 50.sp,
             modifier = Modifier.padding(top = 60.dp)
         )
 
-        OutlinedTextField( //изменяемая ячейка
+        OutlinedTextField(
+            value = state.username,
+            onValueChange = {
+                onEvent(RegisterScreenEvent.UsernameUpdated(it))
+            },
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.outline_child_care_24),
+                    contentDescription = null
+                )
+            },
+            placeholder = {
+                Text(text = stringResource(id = R.string.enter_username))
+            },
+            modifier = Modifier.padding(top = 150.dp),
+        )
+
+        OutlinedTextField(
             value = state.email,
             onValueChange = {
-                onEvent(LoginScreenEvent.EmailUpdated(it))
+                onEvent(RegisterScreenEvent.EmailUpdated(it))
             },
             leadingIcon = {
                 Icon(
@@ -102,13 +110,13 @@ fun LoginView(
             placeholder = {
                 Text(text = stringResource(id = R.string.enter_email))
             },
-            modifier = Modifier.padding(top = 180.dp),
+            modifier = Modifier.padding(top = 10.dp)
         )
 
-        OutlinedTextField( //изменяемая ячейка
+        OutlinedTextField(
             value = state.password,
             onValueChange = {
-                onEvent(LoginScreenEvent.PasswordUpdated(it))
+                onEvent(RegisterScreenEvent.PasswordUpdated(it))
             },
             leadingIcon = {
                 Icon(
@@ -120,10 +128,10 @@ fun LoginView(
             placeholder = {
                 Text(text = stringResource(id = R.string.enter_password))
             },
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(top = 10.dp)
         )
 
-        StyleButton(onClick = {onEvent(LoginScreenEvent.LoginBtnClicked)}, modifier = Modifier.padding(top = 30.dp)) {
+        StyleButton(onClick = {onEvent(RegisterScreenEvent.RegisterBtnClicked)}, modifier = Modifier.padding(top = 30.dp)) {
             Text(
                 text = stringResource(id = R.string.login),
                 fontSize = 19.sp
@@ -131,17 +139,18 @@ fun LoginView(
         }
 
         Text(
-            text = stringResource(id = R.string.no_account_register),
+            text = stringResource(id = R.string.have_account_login),
             fontSize = 16.sp,
             modifier = Modifier.padding(top = 20.dp).clickable{
                 currentColor = Color.Cyan
-                onNavigateTo(Screen.Register)}
+                onNavigetTo(Screen.Login)}
         )
+
     }
 }
 
-@Composable
 @Preview(showBackground = true)
-fun LoginScreenPreview(){
-    LoginView()
+@Composable
+fun RegisterScreenPreview(){
+    RegisterView()
 }

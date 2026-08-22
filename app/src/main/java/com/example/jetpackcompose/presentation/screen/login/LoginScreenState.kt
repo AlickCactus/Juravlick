@@ -1,6 +1,6 @@
-package com.example.jetpackcompose.presentation.screen.state
+package com.example.jetpackcompose.presentation.screen.login
 
-import com.example.jetpackcompose.util.Result
+import com.example.jetpackcompose.domain.util.Result
 
 
 sealed class LoginScreenEvent{

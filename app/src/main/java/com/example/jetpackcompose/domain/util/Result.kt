@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.util
+package com.example.jetpackcompose.domain.util
 
 sealed interface Result {
     data class Success<T>(val msg: String = "", val data: T? = null): Result

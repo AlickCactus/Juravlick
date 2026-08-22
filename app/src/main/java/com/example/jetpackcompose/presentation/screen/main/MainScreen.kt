@@ -1,0 +1,42 @@
+package com.example.jetpackcompose.presentation.screen.main
+
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.jetpackcompose.presentation.navigation.Screen
+import com.example.jetpackcompose.presentation.screen.main.feed.FeedScreen
+import com.example.jetpackcompose.presentation.screen.main.navigation.BottomNavigationBar
+import com.example.jetpackcompose.presentation.screen.main.navigation.MainScreenNavigationRoute
+import com.example.jetpackcompose.presentation.screen.main.profile.ProfileScreen
+
+@Composable
+fun MainScreen(
+    onNavigetTo: (Screen) -> Unit
+) {
+    val navController = rememberNavController()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            BottomNavigationBar(navController)
+        }
+    ) {
+        NavHost(
+            modifier = Modifier.padding(it),
+            navController = navController,
+            startDestination = MainScreenNavigationRoute.Feed
+        ){
+            composable<MainScreenNavigationRoute.Feed> {
+                FeedScreen()
+            }
+            composable<MainScreenNavigationRoute.Profile> {
+                ProfileScreen()
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
-package com.example.jetpackcompose.presentation.screen.state
+package com.example.jetpackcompose.presentation.screen.register
 
-import com.example.jetpackcompose.util.Result
+import com.example.jetpackcompose.domain.util.Result
 
 //для событий(изменение имени/почты/пароля, переход по кнопке)
 sealed class RegisterScreenEvent {

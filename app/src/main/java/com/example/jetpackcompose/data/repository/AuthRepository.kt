@@ -2,7 +2,7 @@ package com.example.jetpackcompose.data.repository
 
 import com.example.jetpackcompose.domain.dao.UserDao
 import com.example.jetpackcompose.domain.entity.User
-import com.example.jetpackcompose.util.Result
+import com.example.jetpackcompose.domain.util.Result
 import java.util.UUID
 import javax.inject.Inject
 
