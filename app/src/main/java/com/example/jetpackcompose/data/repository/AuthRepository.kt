@@ -8,13 +8,16 @@ import javax.inject.Inject
 
 //обязательно принимает UserDao
 class AuthRepository @Inject constructor(
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val localAuthManager: LocalAuthManager
 ){
     suspend fun login(email: String, password: String): Result{
         val loginUser = userDao.login(email, password)
         val result = if(loginUser == null) Result.Failure<Unit>("Login failed")
-        else Result.Success<Unit>("Login successed")
-
+        else {
+            localAuthManager.rememberAuth(loginUser.id)
+            Result.Success<Unit>("Login successed")
+        }
         return result
     }
 
@@ -28,6 +31,9 @@ class AuthRepository @Inject constructor(
             password = password
         )
         userDao.addUser(user)
+
+        localAuthManager.rememberAuth(user.id)
+
         return Result.Success<Unit>("You're registered")
     }
 }

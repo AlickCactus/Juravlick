@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -35,11 +37,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 
@@ -53,6 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,16 +70,21 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
+
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    ksp(libs.androidx.room.compiler)
+
     implementation(libs.glide)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converterJson)
     implementation(libs.okhttp)
 
-    ksp(libs.androidx.room.compiler)
-
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.navigaition.compose)
+
+    implementation(libs.coil.compose)
+
+    implementation(libs.kotlin.datatime)
 }

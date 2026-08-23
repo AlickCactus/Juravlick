@@ -29,12 +29,13 @@ sealed class Screen {
 @Composable
 fun MainNav(
     modifier: Modifier = Modifier, //дополнительные параметры
-    navHostController: NavHostController //контроль с экранов, за подключение, за хранение и тп
+    navHostController: NavHostController, //контроль с экранов, за подключение, за хранение и тп
+    isLoggedIn: Boolean
 ){
     NavHost( //composable функция
         modifier = modifier,
         navController = navHostController,
-        startDestination = Screen.Login
+        startDestination = if (isLoggedIn) Screen.Main else Screen.Login
     ) {
         //все действия по перехода выполняются тут, а не loginScreen, чтобы не было проблем, н-р утечек памяти
         //создавать ViewModel и собирать с нее state

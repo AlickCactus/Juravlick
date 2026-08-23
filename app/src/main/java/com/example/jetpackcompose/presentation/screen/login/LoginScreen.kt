@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.jetpackcompose.R
+import com.example.jetpackcompose.domain.util.Result
 import com.example.jetpackcompose.presentation.navigation.Screen
 import com.example.jetpackcompose.presentation.ui.theme.components.StyleButton
-import com.example.jetpackcompose.domain.util.Result
 
 @Composable
 fun LoginScreen(
