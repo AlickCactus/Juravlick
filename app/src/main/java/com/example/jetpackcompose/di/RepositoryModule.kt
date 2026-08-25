@@ -3,6 +3,7 @@ package com.example.jetpackcompose.di
 import android.content.Context
 import com.example.jetpackcompose.data.repository.AuthRepository
 import com.example.jetpackcompose.data.repository.LocalAuthManager
+import com.example.jetpackcompose.data.repository.NewsRepostory
 import com.example.jetpackcompose.domain.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,12 @@ object RepositoryModule {
     @Singleton //аннотация, чтобы не пересоздавала каждый раз новый репозиторий
     fun provideAuthRepository(userDao: UserDao, localAuthManager: LocalAuthManager): AuthRepository{
         return AuthRepository(userDao, localAuthManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsRepository(): NewsRepostory{
+        return NewsRepostory()
     }
 
 }
