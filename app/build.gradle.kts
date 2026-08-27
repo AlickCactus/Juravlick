@@ -1,4 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -24,7 +27,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val localProperties = Properties()
+    localProperties.load(FileInputStream(rootProject.file("local.properties")))
     buildTypes {
+        all {
+            val apiKey = localProperties.getProperty("API_KEY").orEmpty()
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -39,6 +48,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -87,4 +97,6 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.kotlin.datatime)
+
+    implementation(libs.bundles.ktor)
 }

@@ -114,8 +114,16 @@ fun NewsItem(
 fun NewsItemPreview(){
     JetpackComposeTheme {
         NewsItem(
-            newsItem = NewsItem("1", "News item 1", "News item 1 decription", publishedBy = "News source", publishedAt = Clock.System.now().toLocalDateTime(
-                TimeZone.currentSystemDefault()), imageUrl = "", isFavorite = true),
+            newsItem = com.example.jetpackcompose.domain.model.NewsItem(
+                id = "1",
+                title = "News item 1",
+                description = "News item 1 decription",
+                url = "",
+                publishedBy = "News source",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                imageUrl = "",
+                isFavorite = true
+            ),
             onFavoriteClicked = {},
             onReadClicked = {}
         )
