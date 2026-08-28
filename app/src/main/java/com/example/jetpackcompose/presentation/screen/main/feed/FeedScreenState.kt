@@ -4,5 +4,6 @@ import com.example.jetpackcompose.domain.model.NewsItem
 
 data class FeedScreenState(
     val searchQuery: String = "",
-    val filteredNews: List<NewsItem> = emptyList()
+    val filteredNews: List<NewsItem> = emptyList(),
+    val selectedNewsArtcleUrl: String? = null
 )

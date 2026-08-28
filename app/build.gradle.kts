@@ -28,11 +28,11 @@ android {
     }
 
     val localProperties = Properties()
-    localProperties.load(FileInputStream(rootProject.file("local.properties")))
+    localProperties.load(FileInputStream("local.properties"))
     buildTypes {
         all {
-            val apiKey = localProperties.getProperty("API_KEY").orEmpty()
-            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+//            val apiKey = localProperties.getProperty("API_KEY").orEmpty()
+            buildConfigField("String", "API_KEY", localProperties["API_KEY"].toString())
         }
         release {
             isMinifyEnabled = false
@@ -98,5 +98,8 @@ dependencies {
 
     implementation(libs.kotlin.datatime)
 
-    implementation(libs.bundles.ktor)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 }

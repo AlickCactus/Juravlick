@@ -12,6 +12,10 @@ class LocalAuthManager(private val context: Context) {
         }
     }
 
+    fun getCurrentUserId(): String? {
+        return sharedPreferences.getString("id", null)
+    }
+
     fun isLoggedIn(): Boolean{
         return sharedPreferences.getString("id", null) != null
     }

@@ -2,12 +2,8 @@ package com.example.jetpackcompose.presentation.screen.main.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.jetpackcompose.data.repository.NewsRepostory
+import com.example.jetpackcompose.data.repository.NewsRepository
 import com.example.jetpackcompose.domain.model.NewsItem
-import com.example.jetpackcompose.presentation.navigation.Screen
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +11,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-@HiltViewModel(assistedFactory = FeedScreenViewModel.Factory::class)
-class FeedScreenViewModel @AssistedInject constructor(
-    @Assisted private val navigate: (Screen) -> Unit,
-    private val newsRepostory: NewsRepostory
+
+@HiltViewModel
+class FeedScreenViewModel @Inject constructor(
+    private val newsRepostory: NewsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(FeedScreenState())
@@ -33,12 +30,14 @@ class FeedScreenViewModel @AssistedInject constructor(
 
     fun onEvent(event: FeedScreenEvent) {
         when (event) {
-            is FeedScreenEvent.NewsItemClicked -> {
-                // Пока нет экрана деталей новости — оставляем точку расширения
-            }
+            is FeedScreenEvent.NewsItemClicked -> onNewsItemClicked(event.newsItem)
             is FeedScreenEvent.SearchQueryChanged -> onSearchQueryChanged(event.newsSearchQuery)
             is FeedScreenEvent.NewsItemFavoriteToggleClicked -> onNewsItemFavoriteToggleClicked(event.newsItem)
         }
+    }
+
+    private fun onNewsItemClicked(newsItem: NewsItem){
+        _state.update { it.copy(selectedNewsArtcleUrl = newsItem.url) }
     }
 
     private fun onNewsItemFavoriteToggleClicked(newsItem: NewsItem) {
@@ -78,10 +77,5 @@ class FeedScreenViewModel @AssistedInject constructor(
             if (query.isEmpty()) news
             else news.filter { it.title.contains(query, ignoreCase = true) }
         }
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(navigate: (Screen) -> Unit): FeedScreenViewModel
     }
 }

@@ -10,7 +10,6 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.URLProtocol
-import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
@@ -18,6 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
     @Provides
     @Singleton
     fun provideHttpClient(): HttpClient {
@@ -34,8 +34,7 @@ object NetworkModule {
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = "newsapi.org"
-                    path("v2/")
+                    host = "newsapi.org/v2"
                     parameters.append("apiKey", BuildConfig.API_KEY)
                 }
             }

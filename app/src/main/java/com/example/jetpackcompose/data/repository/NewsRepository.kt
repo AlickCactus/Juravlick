@@ -1,7 +1,9 @@
 package com.example.jetpackcompose.data.repository
 
 import com.example.jetpackcompose.data.dto.NewsApiResponseDto
+import com.example.jetpackcompose.data.util.generateNewsItemIdFromUrl
 import com.example.jetpackcompose.data.util.toModel
+import com.example.jetpackcompose.domain.dao.FavoriteNewsDao
 import com.example.jetpackcompose.domain.model.NewsItem
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -9,15 +11,17 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import javax.inject.Inject
 
-class NewsRepostory @Inject constructor(
-    private val httpClient: HttpClient
+class NewsRepository @Inject constructor(
+    private val httpClient: HttpClient,
+    private val favoriteNewsDao: FavoriteNewsDao
 ) {
     suspend fun loadNews(): List<NewsItem> {
         return try {
             val response = httpClient.get("top-headlines") {
                 parameter("category", "technology")
             }.body<NewsApiResponseDto>()
-            response.articles.map { it.toModel() }
+            val favoriteNewsIdsList = favoriteNewsDao.getAll().map { it.id }
+            response.articles.map { it.toModel(isFavorite = generateNewsItemIdFromUrl(it.url) in favoriteNewsIdsList) }
         } catch (e: Exception) {
             emptyList()
         }

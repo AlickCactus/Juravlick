@@ -1,5 +1,6 @@
 package com.example.jetpackcompose.presentation.screen.main.feed
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,28 +14,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.jetpackcompose.R
-import com.example.jetpackcompose.presentation.navigation.Screen
 import com.example.jetpackcompose.presentation.ui.components.NewsItem
 
 @Composable
-fun FeedScreen(
-    navigate: (Screen) -> Unit = {}
-) {
-    val viewModel = hiltViewModel<FeedScreenViewModel, FeedScreenViewModel.Factory> { factory ->
-        factory.create(navigate)
-    }
+fun FeedScreen() {
+    val viewModel = hiltViewModel<FeedScreenViewModel>()
     val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
 
+    LaunchedEffect(state.selectedNewsArtcleUrl) {
+        state.selectedNewsArtcleUrl?.let { url ->
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            context.startActivity(intent)
+        }
+    }
     FeedScreenContent(
         state = state,
         onEvent = viewModel::onEvent

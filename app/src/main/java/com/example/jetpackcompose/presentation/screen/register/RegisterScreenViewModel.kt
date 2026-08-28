@@ -10,6 +10,7 @@ import javax.inject.Inject
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
+
 @HiltViewModel
 class RegisterScreenViewModel @Inject constructor(private val authRepository: AuthRepository): ViewModel(){
     var state by mutableStateOf(RegisterScreenState())
@@ -17,9 +18,9 @@ class RegisterScreenViewModel @Inject constructor(private val authRepository: Au
 
     fun onEvent(event: RegisterScreenEvent){
         when (event){
-            is RegisterScreenEvent.UsernameUpdated -> state = state.copy(username = event.newUsername)
-            is RegisterScreenEvent.EmailUpdated -> state = state.copy(email = event.newEmail)
-            is RegisterScreenEvent.PasswordUpdated -> state = state.copy(password = event.newPassword)
+            is RegisterScreenEvent.UsernameUpdated -> {this.state = state.copy(username = event.newUsername)}
+            is RegisterScreenEvent.EmailUpdated -> {this.state = state.copy(email = event.newEmail)}
+            is RegisterScreenEvent.PasswordUpdated -> {this.state = state.copy(password = event.newPassword)}
             is RegisterScreenEvent.RegisterBtnClicked -> register()
         }
     }

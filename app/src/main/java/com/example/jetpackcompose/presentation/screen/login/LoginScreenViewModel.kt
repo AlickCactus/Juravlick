@@ -1,14 +1,14 @@
 package com.example.jetpackcompose.presentation.screen.login
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcompose.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
@@ -26,6 +26,7 @@ class LoginScreenViewModel @Inject constructor(private val authRepository: AuthR
     private fun login(){
         val email = state.email
         val password = state.password
+
         viewModelScope.launch {
             val result = authRepository.login(email, password)
             state = state.copy(loginResult = result)

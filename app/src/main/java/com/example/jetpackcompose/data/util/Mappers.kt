@@ -1,18 +1,22 @@
 package com.example.jetpackcompose.data.util
 
 import com.example.jetpackcompose.data.dto.NewsItemDto
+import com.example.jetpackcompose.domain.entity.FavoriteNewsItemEntity
 import com.example.jetpackcompose.domain.model.NewsItem
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import java.security.MessageDigest
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 fun NewsItemDto.toModel(isFavorite: Boolean = false): NewsItem {
     return NewsItem(
         id = generateNewsItemIdFromUrl(url),
         title = title ?: "No Title",
-        url = url.orEmpty(),
+        url = url,
         description = description ?: "No Description",
         publishedBy = source?.name ?: "Unknown Source",
         publishedAt = publishedAt
@@ -20,6 +24,35 @@ fun NewsItemDto.toModel(isFavorite: Boolean = false): NewsItem {
             ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
         imageUrl = urlToImage.orEmpty(),
         isFavorite = isFavorite
+    )
+}
+
+@OptIn(ExperimentalTime::class)
+fun FavoriteNewsItemEntity.toModel(): NewsItem {
+    return NewsItem(
+        id = id,
+        title = title,
+        url = url,
+        description = description,
+        publishedBy = publishedBy,
+        publishedAt = Instant.fromEpochMilliseconds(publishedAt)
+            .toLocalDateTime(TimeZone.currentSystemDefault()),
+        imageUrl = imageUrl,
+        isFavorite = true
+    )
+}
+
+@OptIn(ExperimentalTime::class)
+fun NewsItem.toFavoriteNewsItemEntity(savedByUserId: String): FavoriteNewsItemEntity {
+    return FavoriteNewsItemEntity(
+        id = id,
+        title = title,
+        url = url,
+        description = description,
+        publishedBy = publishedBy,
+        publishedAt = publishedAt.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds(),
+        imageUrl = imageUrl,
+        savedByUserId = savedByUserId
     )
 }
 

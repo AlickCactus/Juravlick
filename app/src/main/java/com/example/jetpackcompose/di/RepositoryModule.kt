@@ -2,8 +2,10 @@ package com.example.jetpackcompose.di
 
 import android.content.Context
 import com.example.jetpackcompose.data.repository.AuthRepository
+import com.example.jetpackcompose.data.repository.FavoriteNewsRepository
 import com.example.jetpackcompose.data.repository.LocalAuthManager
-import com.example.jetpackcompose.data.repository.NewsRepostory
+import com.example.jetpackcompose.data.repository.NewsRepository
+import com.example.jetpackcompose.domain.dao.FavoriteNewsDao
 import com.example.jetpackcompose.domain.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -31,7 +33,13 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideNewsRepository(httpClient: HttpClient): NewsRepostory {
-        return NewsRepostory(httpClient)
+    fun provideNewsRepository(httpClient: HttpClient, favoriteNewsDao: FavoriteNewsDao): NewsRepository {
+        return NewsRepository(httpClient, favoriteNewsDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteNewsRepository(favoriteNewsDao: FavoriteNewsDao): FavoriteNewsRepository {
+        return FavoriteNewsRepository(favoriteNewsDao)
     }
 }
